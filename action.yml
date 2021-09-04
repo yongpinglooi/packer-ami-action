@@ -1,0 +1,53 @@
+name: 'Packer'
+description: 'AMI Builder'
+inputs:
+  aws-access-key-id:
+    description: 'AWS Access Key ID'
+    required: true
+  aws-region:
+    description: 'AWS AMI Region'
+    required: true
+  aws-secret-access-key:
+    description: 'AWS Secret Access Key'
+    required: true
+  build:
+    description: 'Packer build name'
+    required: true
+outputs:
+  ami-id:
+    description: 'AMI ID'
+    value: ${{ steps.build-ami.outputs.ami-id }}
+  aws-region:
+    description: 'AWS AMI Region'
+    value: ${{ steps.build-ami.outputs.aws-region }}
+runs:
+  using: "composite"
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ inputs.aws-access-key-id }}
+          aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+          aws-region: ${{ inputs.aws-region }}
+
+      - name: Use Packer 1.7.2
+        uses: hashicorp-contrib/setup-packer@v1
+        with:
+          packer-version: 1.7.2
+
+      - name: Setup Environment
+        run: |
+          export PKR_VAR_AMI_GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+          echo "PKR_VAR_AMI_GIT_BRANCH=$AMI_GIT_BRANCH" >> $GITHUB_ENV
+
+      - name: Build EC2 AMI
+        id: build-ami
+        env:
+          PKR_VAR_AMI_GIT_SHA: ${{ github.sha }}
+        run: |
+          packer build -var ${{ inputs.aws-region }} -only ${{ inputs.build }} .
+          AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
+          REGION=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f1)
+          echo "::set-output name=ami-id::$(echo $AMI_ID)"
+          echo "::set-output name=aws-region::$(echo $REGION)"
+
