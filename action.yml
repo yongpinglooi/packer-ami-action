@@ -47,7 +47,7 @@ runs:
         PKR_VAR_AMI_GIT_SHA: ${{ github.sha }}
       shell: bash
       run: |
-        packer build -var ${{ inputs.aws-region }} -only ${{ inputs.build }} .
+        packer build -var region=${{ inputs.aws-region }} -only ${{ inputs.build }} .
         AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
         REGION=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f1)
         echo "::set-output name=ami-id::$(echo $AMI_ID)"
