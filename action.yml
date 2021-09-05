@@ -38,7 +38,7 @@ runs:
     - name: Setup Environment
       shell: bash
       run: |
-        export PKR_VAR_AMI_GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+        export AMI_GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
         echo "PKR_VAR_AMI_GIT_BRANCH=$AMI_GIT_BRANCH" >> $GITHUB_ENV
 
     - name: Build EC2 AMI
