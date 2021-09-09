@@ -37,8 +37,6 @@ runs:
 
     - name: Build EC2 AMI
       id: build-ami
-      env:
-        PKR_VAR_AMI_GIT_SHA: ${{ github.sha }}
       shell: bash
       run: |
         packer build -var region=${{ inputs.aws-region }} -only ${{ inputs.build }} .
