@@ -29,6 +29,7 @@ runs:
         aws-access-key-id: ${{ inputs.aws-access-key-id }}
         aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
         aws-region: ${{ inputs.aws-region }}
+        mask-aws-account-id: 'no'
 
     - name: Use Packer 1.7.2
       uses: hashicorp-contrib/setup-packer@v1
