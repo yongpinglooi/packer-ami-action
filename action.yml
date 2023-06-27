@@ -13,6 +13,9 @@ inputs:
   build:
     description: 'Packer build name'
     required: true
+  var-file:
+    description: 'Packer var file'
+    required: false
 outputs:
   ami-id:
     description: 'AMI ID'
@@ -39,8 +42,16 @@ runs:
     - name: Build EC2 AMI
       id: build-ami
       shell: bash
+      env:
+        VAR_FILE: ${{ inputs.var-file }}
       run: |
-        packer build -machine-readable -var region=${{ inputs.aws-region }} -only ${{ inputs.build }} .
+        if [ -z "$VAR_FILE" ]
+        then
+          packer build -machine-readable -var region=${{ inputs.aws-region }} -only ${{ inputs.build }} .
+        else
+          packer build -machine-readable -var region=${{ inputs.aws-region }} -var-file ${{ inputs.var-file }} -only ${{ inputs.build }} .
+        fi
+
         AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
         REGION=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f1)
         echo "::set-output name=ami-id::$(echo $AMI_ID)"
