@@ -32,7 +32,7 @@ runs:
         mask-aws-account-id: false
 
     - name: Use Packer 1.9.1
-      uses: hashicorp-contrib/setup-packer@main
+      uses: hashicorp/setup-packer@main
       with:
         packer-version: 1.9.1
 
