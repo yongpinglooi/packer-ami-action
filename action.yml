@@ -47,6 +47,7 @@ runs:
       shell: bash
       run: |
         cd ${{ inputs.packer-directory }}
+        packer init
         if [ -z "$VAR_FILE" ]
         then
           packer build -machine-readable -var region=${{ inputs.aws-region }} -only ${{ inputs.build }} .
