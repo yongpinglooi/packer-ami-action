@@ -13,6 +13,9 @@ inputs:
   build:
     description: 'Packer build name'
     required: true
+  packer-directory:
+    description: 'Packer directory'
+    required: false
   var-file:
     description: 'Packer var file'
     required: false
@@ -42,9 +45,8 @@ runs:
     - name: Build EC2 AMI
       id: build-ami
       shell: bash
-      env:
-        VAR_FILE: ${{ inputs.var-file }}
       run: |
+        cd ${{ inputs.packer-directory }}
         if [ -z "$VAR_FILE" ]
         then
           packer build -machine-readable -var region=${{ inputs.aws-region }} -only ${{ inputs.build }} .
