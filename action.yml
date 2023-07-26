@@ -34,10 +34,10 @@ runs:
         aws-region: ${{ inputs.aws-region }}
         mask-aws-account-id: false
 
-    - name: Use Packer 1.9.1
-      uses: hashicorp/setup-packer@main
+    - name: Setup Packer
+      uses: hashicorp/setup-packer@v2
       with:
-        packer-version: 1.9.1
+        packer-version: 1.9.2
 
     - name: Build EC2 AMI
       id: build-ami
