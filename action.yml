@@ -51,8 +51,3 @@ runs:
         else
           packer build -machine-readable -var region=${{ inputs.aws-region }} -var-file ${{ inputs.var-file }} -only ${{ inputs.build }} .
         fi
-
-        AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
-        REGION=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f1)
-        echo "::set-output name=ami-id::$(echo $AMI_ID)"
-        echo "::set-output name=aws-region::$(echo $REGION)"
