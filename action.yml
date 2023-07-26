@@ -35,7 +35,7 @@ runs:
         mask-aws-account-id: false
 
     - name: Setup Packer
-      uses: hashicorp/setup-packer@v2
+      uses: hashicorp/setup-packer@v2.0.0
       with:
         packer-version: 1.9.2
 
