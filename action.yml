@@ -40,7 +40,7 @@ runs:
     - name: Setup Packer
       uses: hashicorp/setup-packer@v2.0.0
       with:
-        packer-version: 1.9.2
+        packer-version: 1.7.2
 
     - name: Build EC2 AMI
       id: build-ami
