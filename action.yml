@@ -1,4 +1,4 @@
-name: 'Packer'
+name: 'Packer EC2'
 description: 'AMI Builder'
 inputs:
   aws-access-key-id:
@@ -16,6 +16,10 @@ inputs:
   packer-directory:
     description: 'Packer directory'
     required: false
+  packer-version:
+    description: 'Packer version'
+    required: false
+    default: '1.7'
   var-file:
     description: 'Packer var file'
     required: false
@@ -30,7 +34,7 @@ runs:
   using: "composite"
   steps:
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v2.2.0
+      uses: aws-actions/configure-aws-credentials@v4.0
       with:
         aws-access-key-id: ${{ inputs.aws-access-key-id }}
         aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
@@ -38,19 +42,59 @@ runs:
         mask-aws-account-id: false
 
     - name: Setup Packer
-      uses: hashicorp/setup-packer@v2.0.0
+      uses: hashicorp/setup-packer@v3.0
       with:
-        version: 1.7.2
+        version: ${{ inputs.packer-version }}
 
-    - name: Build EC2 AMI
-      id: build-ami
+    - name: Run `packer init`
+      id: init
       shell: bash
+      working-directory: ${{ inputs.packer-directory }}
+      run: packer init .
+
+    - name: Run `packer validate`
+      id: validate
+      shell: bash
+        VAR_FILE: ${{ inputs.var-file }}
+      working-directory: ${{ inputs.packer-directory }}
       run: |
-        cd ${{ inputs.packer-directory }}
-        packer init .
         if [ -z "$VAR_FILE" ]
         then
-          packer build -machine-readable -var region=${{ inputs.aws-region }} -only ${{ inputs.build }} .
+          packer validate \
+            -var region=${{ inputs.aws-region }} \
+            -only ${{ inputs.build }} \
+            .
         else
-          packer build -machine-readable -var region=${{ inputs.aws-region }} -var-file ${{ inputs.var-file }} -only ${{ inputs.build }} .
+          packer validate \
+            -var region=${{ inputs.aws-region }} \
+            -var-file ${{ inputs.var-file }} \
+            -only ${{ inputs.build }} \
+            .
+        fi
+
+    - name: Run `packer build`
+      id: build-ami
+      shell: bash
+      working-directory: ${{ inputs.packer-directory }}
+      env:
+        VAR_FILE: ${{ inputs.var-file }}
+      run: |
+        if [ -z "$VAR_FILE" ]
+        then
+          packer build \
+            -color=false \
+            -machine-readable 
+            -on-error=abort \
+            -var region=${{ inputs.aws-region }} \
+            -only ${{ inputs.build }} \
+            .
+        else
+          packer build \
+            -color=false \
+            -machine-readable \
+            -on-error=abort \
+            -var region=${{ inputs.aws-region }} \
+            -var-file ${{ inputs.var-file }} \
+            -only ${{ inputs.build }} \
+            .
         fi
