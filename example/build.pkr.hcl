@@ -14,6 +14,7 @@ source "amazon-ebs" "ubuntu-example" {
   ami_regions     = [var.region]
   instance_type   = var.instance_type
   region          = var.region
+  subnet_id       = var.subnet_id
 
   run_tags = {
     ami-create = local.ami_create
@@ -21,7 +22,6 @@ source "amazon-ebs" "ubuntu-example" {
 
   source_ami   = data.amazon-ami.ubuntu.id
   ssh_username = "ubuntu"
-  subnet_id    = var.subnet_id
 
   tags = {
     Name        = local.ami_name
@@ -33,13 +33,12 @@ source "amazon-ebs" "ubuntu-example" {
 
 build {
   sources = ["source.amazon-ebs.ubuntu-example"]
-}
 
-provisioner "shell" {
-  inline = [
-        "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 1; done"
-  ]
-}
+  provisioner "shell" {
+    inline = [
+          "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 1; done"
+    ]
+  }
 
   provisioner "shell" {
     execute_command   = "echo 'ubuntu' | sudo -S env{{ .Vars }} {{ .Path }}"
@@ -49,11 +48,10 @@ provisioner "shell" {
         "${path.root}/scripts/update.sh",
         "${path.root}/scripts/cleanup.sh"
     ]
-
-    post-processors {
-      "manifest" {
-        output     = "${path.root}/manifest.json"
-        strip_path = true
-      }
-    }
   }
+
+  post-processor "manifest" {
+      output     = "${path.root}/manifest.json"
+      strip_path = true
+  }
+}

@@ -1,3 +1,12 @@
+variable "OS_Name" {
+  type    = string
+  default = "Ubuntu"
+}
+
+variable "OS_Version" {
+  type    = string
+}
+
 variable "name" {
   type    = string
   default = "ubuntu-example"
@@ -6,24 +15,21 @@ variable "name" {
 variable "instance_type" {
   type        = string
   description = "AWS instance type"
-  default     = "t2.micro"
 }
 
 variable "region" {
   type        = string
   description = "AWS region"
-  default     = "us-west-2"
 }
 
-variable "source_ami" {
-  type        = string
-  description = "AWS source AMI"
-  default     = "ami-0a313d6098716f372"
+variable "source_ami_name" {
+  description = "The AMI name to filter for."
+  type = string
 }
 
 variable "subnet_id" {
   type        = string
-  description = "AWS subnet ID"
+  description = "The subnet ID to launch the instance in."
 }
 
 locals {
