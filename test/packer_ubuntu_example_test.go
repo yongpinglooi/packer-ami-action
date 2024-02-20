@@ -1,6 +1,7 @@
 package test
 
 import (
+	"os"
 	"testing"
 	"time"
 
@@ -32,6 +33,8 @@ func TestPackerUbuntuExample(t *testing.T) {
 	// Some AWS regions are missing certain instance types, so pick an available type based on the region we picked
 	instanceType := terratest_aws.GetRecommendedInstanceType(t, awsRegion, []string{"t2.micro, t3.micro", "t2.small", "t3.small"})
 
+	subnetId := os.Getenv("SUBNET_ID")
+
 	// Read Packer's template and set AWS Region variable.
 	packerOptions := &packer.Options{
 		// The path to where the Packer template is located
@@ -44,7 +47,7 @@ func TestPackerUbuntuExample(t *testing.T) {
 			"instance_type":   instanceType,
 			"region":          awsRegion,
 			"source_ami_name": "ubuntu-bionic-18.04-amd64-server",
-			"subnet_id":       "subnet-087d7bd58716646b1",
+			"subnet_id":       subnetId,
 		},
 
 		// Only build the AWS AMI
@@ -80,6 +83,8 @@ func TestPackerUbuntuExampleWithVarFile(t *testing.T) {
 	// Some AWS regions are missing certain instance types, so pick an available type based on the region we picked
 	instanceType := terratest_aws.GetRecommendedInstanceType(t, awsRegion, []string{"t2.micro, t3.micro", "t2.small", "t3.small"})
 
+	subnetId := os.Getenv("SUBNET_ID")
+
 	// Read Packer's template and set AWS Region variable.
 	packerOptions := &packer.Options{
 		// The path to where the Packer template is located
@@ -90,7 +95,7 @@ func TestPackerUbuntuExampleWithVarFile(t *testing.T) {
 			"instance_type": instanceType,
 			"name":          "ubuntu-example-2", // name needs to be unique
 			"region":        awsRegion,
-			"subnet_id":     "subnet-087d7bd58716646b1",
+			"subnet_id":     subnetId,
 		},
 
 		// Variables to pass to our Packer build using -var-file options
