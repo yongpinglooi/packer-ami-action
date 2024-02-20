@@ -2,7 +2,10 @@ module packer-tests
 
 go 1.21.0
 
-require github.com/gruntwork-io/terratest v0.46.11
+require (
+	github.com/gruntwork-io/terratest v0.46.11
+	github.com/stretchr/testify v1.8.4
+)
 
 require (
 	github.com/aws/aws-sdk-go v1.44.122 // indirect
@@ -21,7 +24,6 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/pquerna/otp v1.2.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
-	github.com/stretchr/testify v1.8.4 // indirect
 	github.com/urfave/cli v1.22.2 // indirect
 	golang.org/x/crypto v0.14.0 // indirect
 	golang.org/x/net v0.17.0 // indirect
