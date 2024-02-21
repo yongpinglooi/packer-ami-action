@@ -7,7 +7,7 @@ The `packer-aws-ami` Action builds an AWS AMI from the provided inputs and packe
 ## Table of Contents
 
 <!-- TOC -->
-* [GitHub Action: `setup-packer`](#github-action--packer-aws-ami)
+* [GitHub Action: `packer-aws-ami`](#github-action--packer-aws-ami)
   * [Table of Contents](#table-of-contents)
   * [Requirements](#requirements)
   * [Usage](#usage)
