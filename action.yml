@@ -42,7 +42,7 @@ runs:
         mask-aws-account-id: false
 
     - name: Setup Packer
-      uses: hashicorp/setup-packer@v3
+      uses: hashicorp/setup-packer@v3.0.0
       with:
         version: ${{ inputs.packer-version }}
 
