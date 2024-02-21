@@ -30,7 +30,7 @@ jobs:
           aws-region: "us-west-2"
           build: "ubuntu-example"
           packer-directory: "./example"
-          var-file: "./example/ubuntu-18.04.pkrvars.hcl"
+          var-file: "./ubuntu-18.04.pkrvars.hcl"
 
       - name: Clean Up AMIs
         env:
