@@ -67,12 +67,16 @@ This section lists available inputs.
 
 ### Required
 
-The following inputs must be provided.
+The following inputs must be provided when calling the action.
 
 * `aws-access-key-id` - The AWS access key to use to access the EC2 API.
 * `aws-secret-access-key` - The AWS access key secret.
 * `aws-region` - The AWS region to provision the instance in.
 * `build` - The packer build name.
+
+The following inputs must be provided as environment vairiables.
+
+* `SUBNET_ID` - The VPC subnet to provision the instance into.
 
 ### Optional
 
@@ -80,7 +84,7 @@ The following are optional.
 
 * `packer-directory` - The working directory for packer to execute in. Must contain the packer templates. Defaults to ./
 * `packer-version` - The packer version. Defaults to 1.7
-* `var-file` - The var file that provides build specific values.
+* `var-file` - The var file that provides build specific values. Defaults to none.
 
 ## Outputs
 
