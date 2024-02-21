@@ -55,6 +55,7 @@ runs:
     - name: Run `packer validate`
       id: validate
       shell: bash
+      env:
         VAR_FILE: ${{ inputs.var-file }}
       working-directory: ${{ inputs.packer-directory }}
       run: |
