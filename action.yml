@@ -88,6 +88,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.packer-directory }}
       env:
+        PKR_VAR_instance_type: ${{ inputs.instance-type }}
         PKR_VAR_subnet_id: ${{ inputs.subnet-id }}
         VAR_FILE: ${{ inputs.var-file }}
       run: |
