@@ -23,6 +23,7 @@ inputs:
   var-file:
     description: 'Packer var file'
     required: false
+    default: 'none'
 outputs:
   ami-id:
     description: 'AMI ID'
@@ -59,7 +60,7 @@ runs:
         VAR_FILE: ${{ inputs.var-file }}
       working-directory: ${{ inputs.packer-directory }}
       run: |
-        if [ -z "$VAR_FILE" ]
+        if [ "$VAR_FILE" = "none" ]
         then
           packer validate \
             -var region=${{ inputs.aws-region }} \
@@ -80,7 +81,7 @@ runs:
       env:
         VAR_FILE: ${{ inputs.var-file }}
       run: |
-        if [ -z "$VAR_FILE" ]
+        if [ "$VAR_FILE" = "none" ]
         then
           packer build \
             -color=false \
