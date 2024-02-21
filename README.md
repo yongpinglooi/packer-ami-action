@@ -91,6 +91,6 @@ This section lists all outputs that can be consumed from this action.
 
 ## Author Information
 
-This GitHub Action is maintained by the contributors listed on [GitHub](https://github.com/hashicorp/setup-packer/graphs/contributors).
+This GitHub Action is maintained by the contributors listed on [GitHub](https://github.com/craniumcafe/packer-ami-action/graphs/contributors).
 
-The original code of this repository is based on [hashicorp/setup-packer](https://github.com/hashicorp/setup-packer) via work done by [Matthew Sanabria](https://github.com/sudomateo) as part of the [setup-packer](https://github.com/sudomateo/setup-packer) GitHub Action, and [chef-bento](https://github.com/chef/bento).
+The original code of this repository is based on [hashicorp/setup-packer](https://github.com/hashicorp/setup-packer) GitHub Action, and [chef-bento](https://github.com/chef/bento).
