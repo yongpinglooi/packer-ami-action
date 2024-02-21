@@ -36,6 +36,8 @@ outputs:
     value: ${{ steps.build-ami.outputs.aws-region }}
 runs:
   using: "composite"
+  environment:
+    SUBNET_ID: ${{ inputs.subnet-id }}
   steps:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
