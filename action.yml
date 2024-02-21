@@ -20,6 +20,9 @@ inputs:
     description: 'Packer version'
     required: false
     default: '1.7'
+  subnet-id:
+    description: 'AWS Subnet ID. Export to environment variable `SUBNET_ID`'
+    required: true
   var-file:
     description: 'Packer var file'
     required: false
