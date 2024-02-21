@@ -13,6 +13,10 @@ inputs:
   build:
     description: 'Packer build name'
     required: true
+  instance-type:
+    description: 'AWS EC2 Instance Type'
+    required: true
+    default: 't3.micro'
   packer-directory:
     description: 'Packer directory'
     required: false
@@ -60,6 +64,7 @@ runs:
       id: validate
       shell: bash
       env:
+        PKR_VAR_instance_type: ${{ inputs.instance-type }}
         PKR_VAR_subnet_id: ${{ inputs.subnet-id }}
         VAR_FILE: ${{ inputs.var-file }}
       working-directory: ${{ inputs.packer-directory }}
