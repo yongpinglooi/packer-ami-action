@@ -2,7 +2,7 @@
 
 The `packer-aws-ami` Action builds an AWS AMI from the provided inputs and packer template. Defaults to packer 1.7.
 
-[![GitHub Action: Self-Test](https://github.com/hashicorp/setup-packer/actions/workflows/actions-self-test.yml/badge.svg?branch=main)](https://github.com/hashicorp/setup-packer/actions/workflows/actions-self-test.yml)
+[![GitHub Action: Self-Test](https://github.com/craniumcafe/packer-aws-ami/actions/workflows/actions-self-test.yml/badge.svg?branch=main)](https://github.com/hashicorp/setup-packer/actions/workflows/actions-self-test.yml)
 
 ## Table of Contents
 
