@@ -1,0 +1,62 @@
+name: "GitHub Action: Self-Test"
+
+# run once a week on Sunday at midnight
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+
+jobs:
+  test-action:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ matrix.environment }}
+    strategy:
+      matrix:
+        environment: [
+          prod,
+          qa
+        ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Test Action
+        id: test-action
+        uses: "./"
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "us-west-2"
+          build: "ubuntu-example"
+          packer-directory: "./example"
+          var-file: "./example/ubuntu-18.04.pkrvars.hcl"
+
+      - name: Clean Up AMIs
+        env:
+          AMI_ID: ${{ steps.test-action.outputs.ami_id }}
+        run: |
+          aws ec2 deregister-image \
+          --image-id $AMI_ID \
+          --region us-west-2
+
+  test-packer:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ matrix.environment }}
+    strategy:
+      matrix:
+        environment: [
+          prod,
+          qa
+        ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Test Packer
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: "us-west-2"
+        working-directory: ./test
+        run: go test -v -timeout 30m
