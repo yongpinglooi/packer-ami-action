@@ -36,8 +36,6 @@ outputs:
     value: ${{ steps.build-ami.outputs.aws-region }}
 runs:
   using: "composite"
-  env:
-    SUBNET_ID: ${{ inputs.subnet-id }}
   steps:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
@@ -62,6 +60,7 @@ runs:
       id: validate
       shell: bash
       env:
+        SUBNET_ID: ${{ inputs.subnet-id }}
         VAR_FILE: ${{ inputs.var-file }}
       working-directory: ${{ inputs.packer-directory }}
       run: |
@@ -84,6 +83,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.packer-directory }}
       env:
+        SUBNET_ID: ${{ inputs.subnet-id }}
         VAR_FILE: ${{ inputs.var-file }}
       run: |
         if [ "$VAR_FILE" = "none" ]
