@@ -60,7 +60,7 @@ runs:
       id: validate
       shell: bash
       env:
-        SUBNET_ID: ${{ inputs.subnet-id }}
+        PKR_VAR_subnet_id: ${{ inputs.subnet-id }}
         VAR_FILE: ${{ inputs.var-file }}
       working-directory: ${{ inputs.packer-directory }}
       run: |
@@ -83,7 +83,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.packer-directory }}
       env:
-        SUBNET_ID: ${{ inputs.subnet-id }}
+        PKR_VAR_subnet_id: ${{ inputs.subnet-id }}
         VAR_FILE: ${{ inputs.var-file }}
       run: |
         if [ "$VAR_FILE" = "none" ]
