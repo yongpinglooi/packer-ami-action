@@ -4,6 +4,18 @@ The `packer-aws-ami` Action builds an AWS AMI from the provided inputs and packe
 
 [![GitHub Action: Self-Test](https://github.com/hashicorp/setup-packer/actions/workflows/actions-self-test.yml/badge.svg?branch=main)](https://github.com/hashicorp/setup-packer/actions/workflows/actions-self-test.yml)
 
+## Table of Contents
+
+<!-- TOC -->
+* [GitHub Action: `setup-packer`](#github-action--packer-aws-ami)
+  * [Table of Contents](#table-of-contents)
+  * [Requirements](#requirements)
+  * [Usage](#usage)
+  * [Inputs](#inputs)
+  * [Outputs](#outputs)
+  * [Author Information](#author-information)
+<!-- TOC -->
+
 ## Requirements
 
 An AWS account and coresponding credentials.
@@ -57,25 +69,25 @@ This section lists available inputs.
 
 The following inputs must be provided.
 
-- `aws-access-key-id` - The AWS access key to use to access the EC2 API.
-- `aws-secret-access-key` - The AWS access key secret.
-- `aws-region` - The AWS region to provision the instance in.
-- `build` - The packer build name.
+* `aws-access-key-id` - The AWS access key to use to access the EC2 API.
+* `aws-secret-access-key` - The AWS access key secret.
+* `aws-region` - The AWS region to provision the instance in.
+* `build` - The packer build name.
 
 ### Optional
 
 The following are optional.
 
-- `packer-directory` - The working directory for packer to execute in. Must contain the packer templates. Defaults to ./
-- `packer-version` - The packer version. Defaults to 1.7
-- `var-file` - The var file that provides build specific values.
+* `packer-directory` - The working directory for packer to execute in. Must contain the packer templates. Defaults to ./
+* `packer-version` - The packer version. Defaults to 1.7
+* `var-file` - The var file that provides build specific values.
 
 ## Outputs
 
 This section lists all outputs that can be consumed from this action.
 
-- `ami-id` - The AWS AMI ID of the build artifact.
-- `aws-region` - The AWS region where the resulting AMI is stored.
+* `ami-id` - The AWS AMI ID of the build artifact.
+* `aws-region` - The AWS region where the resulting AMI is stored.
 
 ## Author Information
 
