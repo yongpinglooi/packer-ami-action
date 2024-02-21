@@ -28,7 +28,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: "us-west-2"
-          build: "ubuntu-example"
+          build: "amazon-ebs.ubuntu-example"
           instance-type: "t3.micro"
           packer-directory: "./example"
           subnet-id: ${{ env.SUBNET_ID }}
