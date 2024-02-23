@@ -31,7 +31,6 @@ jobs:
           build: "amazon-ebs.ubuntu-example"
           instance-type: "t3.micro"
           packer-directory: "./example"
-          subnet-id: ${{ env.SUBNET_ID }}
           var-file: "./ubuntu-18.04.pkrvars.hcl"
 
       - name: Clean Up AMIs

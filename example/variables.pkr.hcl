@@ -29,7 +29,14 @@ variable "source_ami_name" {
 
 variable "subnet_id" {
   type        = string
-  description = "The subnet ID to launch the instance in."
+  description = "The subnet ID to launch the instance in. Recommend setting with PKR_VAR_SUBNET_ID environment variable to prevent leaking sensitive information."
+  default     = ""
+}
+
+variable "vpc_id" {
+  type        = string
+  description = "The VPC ID to launch the instance in. Recommend setting with PKR_VAR_VPC_ID environment variable to prevent leaking sensitive information."
+  default     = ""
 }
 
 locals {
