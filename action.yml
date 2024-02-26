@@ -68,9 +68,13 @@ runs:
       shell: bash
       env:
         PKR_VAR_instance_type: ${{ inputs.instance-type }}
+        PKR_VAR_SUBNET_ID: ${{ inputs.subnet-id }}
+        PKR_VAR_VPC_ID: ${{ inputs.vpc-id }}
         VAR_FILE: ${{ inputs.var-file }}
       working-directory: ${{ inputs.packer-directory }}
       run: |
+        echo "Validating Packer template..."
+
         # Output the subnet and vpc ids
         echo "Subnet ID: $PKR_VAR_SUBNET_ID"
         echo "VPC ID: $PKR_VAR_VPC_ID"
@@ -95,8 +99,12 @@ runs:
       working-directory: ${{ inputs.packer-directory }}
       env:
         PKR_VAR_instance_type: ${{ inputs.instance-type }}
+        PKR_VAR_SUBNET_ID: ${{ inputs.subnet-id }}
+        PKR_VAR_VPC_ID: ${{ inputs.vpc-id }}
         VAR_FILE: ${{ inputs.var-file }}
       run: |
+        echo "Building AMI..."
+
         if [ "$VAR_FILE" = "none" ]
         then
           packer build \
