@@ -37,7 +37,7 @@ jobs:
 
       - name: Clean Up AMIs
         env:
-          AMI_ID: ${{ steps.test-action.outputs.ami_id }}
+          AMI_ID: ${{ steps.test-action.outputs.ami-id }}
         run: |
           aws ec2 deregister-image \
           --image-id $AMI_ID \
