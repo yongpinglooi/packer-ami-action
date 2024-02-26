@@ -130,8 +130,10 @@ runs:
       id: set-ami-id
       shell: bash 
       run: |
-        if [ -f ./build-ami.log ]; then
-          echo "::set-output name=ami-id::$(grep -oP 'artifact,0,id,[a-z0-9-]*' build-ami.log | cut -d, -f6 | cut -d: -f2)"
+        if [ -f ./manifest.json ]; then
+          AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d':' -f2)
+          echo "AMI ID: $AMI_ID"
+          echo "::set-output name=ami-id::$AMI_ID"
         else
-          echo "build-ami.log does not exist."
+          echo "The Packer Maifest does not exist."
         fi
