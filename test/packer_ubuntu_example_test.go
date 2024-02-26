@@ -34,6 +34,7 @@ func TestPackerUbuntuExample(t *testing.T) {
 	instanceType := terratest_aws.GetRecommendedInstanceType(t, awsRegion, []string{"t2.micro, t3.micro", "t2.small", "t3.small"})
 
 	subnetId := os.Getenv("SUBNET_ID")
+	vpcId := os.Getenv("VPC_ID")
 
 	// Read Packer's template and set AWS Region variable.
 	packerOptions := &packer.Options{
@@ -48,6 +49,7 @@ func TestPackerUbuntuExample(t *testing.T) {
 			"region":          awsRegion,
 			"source_ami_name": "ubuntu-bionic-18.04-amd64-server",
 			"subnet_id":       subnetId,
+			"vpc_id":          vpcId,
 		},
 
 		// Only build the AWS AMI
@@ -84,6 +86,7 @@ func TestPackerUbuntuExampleWithVarFile(t *testing.T) {
 	instanceType := terratest_aws.GetRecommendedInstanceType(t, awsRegion, []string{"t2.micro, t3.micro", "t2.small", "t3.small"})
 
 	subnetId := os.Getenv("SUBNET_ID")
+	vpcId := os.Getenv("VPC_ID")
 
 	// Read Packer's template and set AWS Region variable.
 	packerOptions := &packer.Options{
@@ -96,6 +99,7 @@ func TestPackerUbuntuExampleWithVarFile(t *testing.T) {
 			"name":          "ubuntu-example-2", // name needs to be unique
 			"region":        awsRegion,
 			"subnet_id":     subnetId,
+			"vpc_id":        vpcId,
 		},
 
 		// Variables to pass to our Packer build using -var-file options
