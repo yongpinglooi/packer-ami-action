@@ -77,8 +77,8 @@ runs:
         echo "Validating Packer template..."
 
         # Output the subnet and vpc ids
-        echo "Subnet ID: $PKR_VAR_SUBNET_ID"
-        echo "VPC ID: $PKR_VAR_VPC_ID"
+        echo "Subnet ID: $PKR_VAR_subnet_id"
+        echo "VPC ID: $PKR_VAR_vpc_id"
 
         if [ "$VAR_FILE" = "none" ]
         then
@@ -125,3 +125,11 @@ runs:
             -only ${{ inputs.build }} \
             .
         fi
+
+    - name: Set AMI ID output
+      id: set-ami-id
+      shell: bash 
+      run: |
+        echo "::set-output name=ami-id::$(grep -oP 'artifact,0,id,[a-z0-9-]*' build-ami.log | \
+          cut -d, -f6 | \
+          cut -d: -f2)"
