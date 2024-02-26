@@ -37,7 +37,7 @@ inputs:
 outputs:
   ami-id:
     description: 'AMI ID'
-    value: ${{ steps.build-ami.outputs.ami-id }}
+    value: ${{ steps.set-ami-id.outputs.ami-id }}
   aws-region:
     description: 'AWS AMI Region'
     value: ${{ steps.build-ami.outputs.aws-region }}
