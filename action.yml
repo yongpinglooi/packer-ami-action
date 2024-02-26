@@ -129,6 +129,7 @@ runs:
     - name: Set AMI ID output
       id: set-ami-id
       shell: bash 
+      working-directory: ${{ inputs.packer-directory }}
       run: |
         if [ -f ./manifest.json ]; then
           AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d':' -f2)
