@@ -45,7 +45,7 @@ runs:
   using: "composite"
 
   steps:
-    - name: Configure AWS credentials
+    - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ inputs.aws-access-key-id }}
@@ -126,7 +126,7 @@ runs:
             .
         fi
 
-    - name: Set AMI ID output
+    - name: Set AMI ID Outputs
       id: set-ami-id
       shell: bash 
       working-directory: ${{ inputs.packer-directory }}
@@ -134,7 +134,11 @@ runs:
         if [ -f ./manifest.json ]; then
           AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d':' -f2)
           echo "AMI ID: $AMI_ID"
-          echo "::set-output name=ami-id::$AMI_ID"
+          echo "ami-id=$AMI_ID" >> $GITHUB_OUTPUT
+
+          REGION=$(jq -r '.builds[-1].region' manifest.json | cut -d':' -f1)
+          echo "AWS Region: $REGION"
+          echo "aws-region=$REGION" >> $GITHUB_OUTPUT
         else
           echo "The Packer Maifest does not exist."
         fi
