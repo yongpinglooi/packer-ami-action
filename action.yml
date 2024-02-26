@@ -43,6 +43,13 @@ outputs:
     value: ${{ steps.build-ami.outputs.aws-region }}
 runs:
   using: "composite"
+
+  env:
+    PKR_VAR_instance_type: ${{ inputs.instance-type }}
+    PKR_VAR_subnet_id: ${{ inputs.subnet-id }}
+    PKR_VAR_vpc_id: ${{ inputs.vpc-id }}
+    VAR_FILE: ${{ inputs.var-file }}
+
   steps:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
@@ -66,11 +73,6 @@ runs:
     - name: Run `packer validate`
       id: validate
       shell: bash
-      env:
-        PKR_VAR_instance_type: ${{ inputs.instance-type }}
-        PKR_VAR_SUBNET_ID: ${{ inputs.subnet-id }}
-        PKR_VAR_VPC_ID: ${{ inputs.vpc-id }}
-        VAR_FILE: ${{ inputs.var-file }}
       working-directory: ${{ inputs.packer-directory }}
       run: |
         echo "Validating Packer template..."
@@ -97,11 +99,6 @@ runs:
       id: build-ami
       shell: bash
       working-directory: ${{ inputs.packer-directory }}
-      env:
-        PKR_VAR_instance_type: ${{ inputs.instance-type }}
-        PKR_VAR_SUBNET_ID: ${{ inputs.subnet-id }}
-        PKR_VAR_VPC_ID: ${{ inputs.vpc-id }}
-        VAR_FILE: ${{ inputs.var-file }}
       run: |
         echo "Building AMI..."
 
