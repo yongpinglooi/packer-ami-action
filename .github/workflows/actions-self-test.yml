@@ -78,3 +78,22 @@ jobs:
           echo "VPC ID: $PKR_VAR_vpc_id"
 
           go test -v -timeout 30m
+
+      - name: Install Terratest Log Parser
+        working-directory: ./test
+        run: |
+         curl --location --silent --fail --show-error -o terratest_log_parser \
+           https://github.com/gruntwork-io/terratest/releases/download/v0.13.13/terratest_log_parser_linux_amd64
+
+         chmod +x terratest_log_parser
+         sudo mv terratest_log_parser /usr/local/bin
+
+      - name: Parse Test Logs
+        working-directory: ./test
+        run: terratest_log_parser -testlog test_output.log -outputdir test_output
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: test/test_output/**/*.xml
