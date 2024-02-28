@@ -26,14 +26,14 @@ inputs:
     default: '1.7'
   subnet-id:
     description: 'AWS Subnet ID. Export to environment variable `PKR_VAR_SUBNET_ID`'
-    required: true
+    required: false
   var-file:
     description: 'Packer var file'
     required: false
     default: 'none'
   vpc-id:
     description: 'AWS VPC ID. Export to environment variable `PKR_VAR_VPC_ID`'
-    required: true
+    required: false
 outputs:
   ami-id:
     description: 'AMI ID'
