@@ -110,7 +110,7 @@ runs:
         then
           packer build \
             -color=false \
-            -machine-readable 
+            -machine-readable \
             -on-error=abort \
             -var region=${{ inputs.aws-region }} \
             -only ${{ inputs.build }} \
