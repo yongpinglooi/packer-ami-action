@@ -79,7 +79,7 @@ runs:
         echo "Subnet ID: $PKR_VAR_subnet_id"
         echo "VPC ID: $PKR_VAR_vpc_id"
 
-        if [ "$VAR_FILE" = "none" ]
+        if [ -z "$VAR_FILE" ]
         then
           packer validate \
             -var region=${{ inputs.aws-region }} \
@@ -105,7 +105,7 @@ runs:
       run: |
         echo "Building AMI..."
 
-        if [ "$VAR_FILE" = "none" ]
+        if [ -z "$VAR_FILE" ]
         then
           packer build \
             -color=false \
