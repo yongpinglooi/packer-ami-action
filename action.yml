@@ -30,7 +30,6 @@ inputs:
   var-file:
     description: 'Packer var file'
     required: false
-    default: 'none'
   vpc-id:
     description: 'AWS VPC ID. Export to environment variable `PKR_VAR_VPC_ID`'
     required: false

@@ -39,7 +39,7 @@ jobs:
     name: Build AMI
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Test Action
         id: test-action
