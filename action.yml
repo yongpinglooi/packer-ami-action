@@ -135,7 +135,7 @@ runs:
           echo "AMI ID: $AMI_ID"
           echo "ami-id=$AMI_ID" >> $GITHUB_OUTPUT
 
-          REGION=$(jq -r '.builds[-1].region' manifest.json | cut -d':' -f1)
+          REGION=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d':' -f1)
           echo "AWS Region: $REGION"
           echo "aws-region=$REGION" >> $GITHUB_OUTPUT
         else
