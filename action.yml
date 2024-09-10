@@ -30,6 +30,7 @@ inputs:
   template:
     description: "Packer template"
     required: true
+    default: "\\."
   var-file:
     description: "Packer var file"
     required: false
@@ -63,8 +64,12 @@ runs:
     - name: Run `packer init`
       id: init
       shell: bash
+      env:
+        TEMPLATE: ${{ inputs.template }}
       working-directory: ${{ inputs.packer-directory }}
-      run: packer init {{ inputs.template }}
+      run: |
+        echo "PACKER COMMAND: packer init $TEMPLATE"
+        packer init $TEMPLATE
 
     - name: Run `packer validate`
       id: validate
@@ -73,6 +78,7 @@ runs:
         PKR_VAR_instance_type: ${{ inputs.instance-type }}
         PKR_VAR_subnet_id: ${{ inputs.subnet-id }}
         PKR_VAR_vpc_id: ${{ inputs.vpc-id }}
+        TEMPLATE: ${{ inputs.template }}
         VAR_FILE: ${{ inputs.var-file }}
       working-directory: ${{ inputs.packer-directory }}
       run: |
@@ -87,13 +93,13 @@ runs:
           packer validate \
             -var region=${{ inputs.aws-region }} \
             -only ${{ inputs.build }} \
-            {{ inputs.template }}
+            $TEMPLATE
         else
           packer validate \
             -var region=${{ inputs.aws-region }} \
             -var-file ${{ inputs.var-file }} \
             -only ${{ inputs.build }} \
-            {{ inputs.template }}
+            $TEMPLATE
         fi
 
     - name: Run `packer build`
@@ -103,6 +109,7 @@ runs:
         PKR_VAR_instance_type: ${{ inputs.instance-type }}
         PKR_VAR_subnet_id: ${{ inputs.subnet-id }}
         PKR_VAR_vpc_id: ${{ inputs.vpc-id }}
+        TEMPLATE: ${{ inputs.template }}
         VAR_FILE: ${{ inputs.var-file }}
       working-directory: ${{ inputs.packer-directory }}
       run: |
@@ -116,7 +123,7 @@ runs:
             -on-error=abort \
             -var region=${{ inputs.aws-region }} \
             -only ${{ inputs.build }} \
-            {{ inputs.template }}
+            $TEMPLATE
         else
           packer build \
             -color=false \
@@ -125,7 +132,7 @@ runs:
             -var region=${{ inputs.aws-region }} \
             -var-file ${{ inputs.var-file }} \
             -only ${{ inputs.build }} \
-            {{ inputs.template }}
+            $TEMPLATE
         fi
 
     - name: Set AMI ID Outputs
