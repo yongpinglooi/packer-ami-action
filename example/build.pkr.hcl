@@ -1,3 +1,12 @@
+packer {
+  required_plugins {
+    amazon = {
+      source  = "github.com/hashicorp/amazon"
+      version = "~> 1"
+    }
+  }
+}
+
 data "amazon-ami" "ubuntu" {
   filters = {
     name                = "ubuntu/images/*${var.source_ami_name}-*"
