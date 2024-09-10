@@ -1,44 +1,47 @@
-name: 'Packer EC2'
-description: 'AMI Builder'
+name: "Packer EC2"
+description: "AMI Builder"
 inputs:
   aws-access-key-id:
-    description: 'AWS Access Key ID'
+    description: "AWS Access Key ID"
     required: true
   aws-region:
-    description: 'AWS AMI Region'
+    description: "AWS AMI Region"
     required: true
   aws-secret-access-key:
-    description: 'AWS Secret Access Key'
+    description: "AWS Secret Access Key"
     required: true
   build:
-    description: 'Packer build name'
+    description: "Packer build name"
     required: true
   instance-type:
-    description: 'AWS EC2 Instance Type'
+    description: "AWS EC2 Instance Type"
     required: true
-    default: 't3.micro'
+    default: "t3.micro"
   packer-directory:
-    description: 'Packer directory'
+    description: "Packer directory"
     required: false
   packer-version:
-    description: 'Packer version'
+    description: "Packer version"
     required: false
-    default: '1.7'
+    default: "1.7"
   subnet-id:
-    description: 'AWS Subnet ID. Export to environment variable `PKR_VAR_SUBNET_ID`'
+    description: "AWS Subnet ID. Export to environment variable `PKR_VAR_SUBNET_ID`"
     required: false
+  template:
+    description: "Packer template"
+    required: true
   var-file:
-    description: 'Packer var file'
+    description: "Packer var file"
     required: false
   vpc-id:
-    description: 'AWS VPC ID. Export to environment variable `PKR_VAR_VPC_ID`'
+    description: "AWS VPC ID. Export to environment variable `PKR_VAR_VPC_ID`"
     required: false
 outputs:
   ami-id:
-    description: 'AMI ID'
+    description: "AMI ID"
     value: ${{ steps.set-ami-id.outputs.ami-id }}
   aws-region:
-    description: 'AWS AMI Region'
+    description: "AWS AMI Region"
     value: ${{ steps.build-ami.outputs.aws-region }}
 runs:
   using: "composite"
@@ -61,7 +64,7 @@ runs:
       id: init
       shell: bash
       working-directory: ${{ inputs.packer-directory }}
-      run: packer init .
+      run: packer init {{ inputs.template }}
 
     - name: Run `packer validate`
       id: validate
@@ -84,13 +87,13 @@ runs:
           packer validate \
             -var region=${{ inputs.aws-region }} \
             -only ${{ inputs.build }} \
-            .
+            {{ inputs.template }}
         else
           packer validate \
             -var region=${{ inputs.aws-region }} \
             -var-file ${{ inputs.var-file }} \
             -only ${{ inputs.build }} \
-            .
+            {{ inputs.template }}
         fi
 
     - name: Run `packer build`
@@ -113,7 +116,7 @@ runs:
             -on-error=abort \
             -var region=${{ inputs.aws-region }} \
             -only ${{ inputs.build }} \
-            .
+            {{ inputs.template }}
         else
           packer build \
             -color=false \
@@ -122,12 +125,12 @@ runs:
             -var region=${{ inputs.aws-region }} \
             -var-file ${{ inputs.var-file }} \
             -only ${{ inputs.build }} \
-            .
+            {{ inputs.template }}
         fi
 
     - name: Set AMI ID Outputs
       id: set-ami-id
-      shell: bash 
+      shell: bash
       working-directory: ${{ inputs.packer-directory }}
       run: |
         if [ -f ./manifest.json ]; then

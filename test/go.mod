@@ -1,6 +1,6 @@
 module packer-tests
 
-go 1.21
+go 1.22.1
 
 require (
 	github.com/gruntwork-io/terratest v0.46.11
