@@ -31,6 +31,7 @@ jobs:
           build: "amazon-ebs.ubuntu-example"
           instance-type: "t3.micro"
           packer-directory: "./example"
+          packer-version: "1.11"
           subnet-id: ${{ vars.SUBNET_ID }}
           template: "build.pkr.hcl"
           vpc-id: ${{ vars.VPC_ID }}
