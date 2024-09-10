@@ -45,58 +45,58 @@ jobs:
           --image-id $AMI_ID \
           --region us-west-2
 
-  # test-packer:
-  #   runs-on: ubuntu-latest
-  #   environment:
-  #     name: ${{ matrix.environment }}
-  #   strategy:
-  #     matrix:
-  #       environment: [
-  #         prod,
-  #         qa
-  #       ]
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
+  test-packer:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ matrix.environment }}
+    strategy:
+      matrix:
+        environment: [
+          prod,
+          qa
+        ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  #     - name: Setup Packer
-  #       uses: hashicorp/setup-packer@v3.0.0
-  #       with:
-  #         version: '1.7'
+      - name: Setup Packer
+        uses: hashicorp/setup-packer@v3.0.0
+        with:
+          version: '1.7'
 
-  #     - name: Install Terratest Log Parser
-  #       working-directory: ./test
-  #       run: |
-  #        curl --location --silent --fail --show-error -o terratest_log_parser \
-  #          https://github.com/gruntwork-io/terratest/releases/download/v0.13.13/terratest_log_parser_linux_amd64
+      - name: Install Terratest Log Parser
+        working-directory: ./test
+        run: |
+         curl --location --silent --fail --show-error -o terratest_log_parser \
+           https://github.com/gruntwork-io/terratest/releases/download/v0.13.13/terratest_log_parser_linux_amd64
 
-  #        chmod +x terratest_log_parser
-  #        sudo mv terratest_log_parser /usr/local/bin
+         chmod +x terratest_log_parser
+         sudo mv terratest_log_parser /usr/local/bin
 
-  #     - name: Test Packer
-  #       env:
-  #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #         AWS_REGION: "us-west-2"
-  #         SUBNET_ID: ${{ vars.SUBNET_ID }}
-  #         VPC_ID: ${{ vars.VPC_ID }}
-  #       working-directory: ./test
-  #       run: |
-  #         echo "Testing Packer..."
+      - name: Test Packer
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: "us-west-2"
+          SUBNET_ID: ${{ vars.SUBNET_ID }}
+          VPC_ID: ${{ vars.VPC_ID }}
+        working-directory: ./test
+        run: |
+          echo "Testing Packer..."
 
-  #         # Output the subnet and vpc ids
-  #         echo "Subnet ID: $PKR_VAR_subnet_id"
-  #         echo "VPC ID: $PKR_VAR_vpc_id"
+          # Output the subnet and vpc ids
+          echo "Subnet ID: $PKR_VAR_subnet_id"
+          echo "VPC ID: $PKR_VAR_vpc_id"
 
-  #         go test -v -timeout 30m | tee test_output.log
-  #         terratest_log_parser -testlog test_output.log -outputdir test_output
+          go test -v -timeout 30m | tee test_output.log
+          terratest_log_parser -testlog test_output.log -outputdir test_output
 
-  #     - name: Parse Test Logs
-  #       working-directory: ./test
-  #       run: terratest_log_parser -testlog test_output.log -outputdir test_output
+      - name: Parse Test Logs
+        working-directory: ./test
+        run: terratest_log_parser -testlog test_output.log -outputdir test_output
 
-  #     - name: Publish Unit Test Results
-  #       uses: EnricoMi/publish-unit-test-result-action@v2
-  #       if: always()
-  #       with:
-  #         files: test/test_output/**/*.xml
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: test/test_output/**/*.xml
