@@ -23,6 +23,7 @@ jobs:
           aws-region: "ap-southeast-1"
           packer-directory: "./example"
           var-file: "./example/amzn2.pkrvars.hcl"
+          build: "amazon-ebs.amazon-linux2" 
 
       - name: Clean Up AMIs
         env:
