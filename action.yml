@@ -1,5 +1,6 @@
 name: "Packer EC2"
 description: "AMI Builder"
+
 inputs:
   aws-access-key-id:
     description: "AWS Access Key ID"
@@ -30,13 +31,14 @@ inputs:
   template:
     description: "Packer template"
     required: true
-    default: "\\."
+    default: "."
   var-file:
     description: "Packer var file"
     required: false
   vpc-id:
     description: "AWS VPC ID. Export to environment variable `PKR_VAR_VPC_ID`"
     required: false
+
 outputs:
   ami-id:
     description: "AMI ID"
@@ -44,9 +46,9 @@ outputs:
   aws-region:
     description: "AWS AMI Region"
     value: ${{ steps.build-ami.outputs.aws-region }}
+
 runs:
   using: "composite"
-
   steps:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
@@ -83,13 +85,10 @@ runs:
       working-directory: ${{ inputs.packer-directory }}
       run: |
         echo "Validating Packer template..."
-
-        # Output the subnet and vpc ids
         echo "Subnet ID: $PKR_VAR_subnet_id"
         echo "VPC ID: $PKR_VAR_vpc_id"
 
-        if [ -z "$VAR_FILE" ]
-        then
+        if [ -z "$VAR_FILE" ]; then
           packer validate \
             -var region=${{ inputs.aws-region }} \
             -only ${{ inputs.build }} \
@@ -97,7 +96,7 @@ runs:
         else
           packer validate \
             -var region=${{ inputs.aws-region }} \
-            -var-file ${{ inputs.var-file }} \
+            -var-file $VAR_FILE \
             -only ${{ inputs.build }} \
             $TEMPLATE
         fi
@@ -115,8 +114,7 @@ runs:
       run: |
         echo "Building AMI..."
 
-        if [ -z "$VAR_FILE" ]
-        then
+        if [ -z "$VAR_FILE" ]; then
           packer build \
             -color=false \
             -machine-readable \
@@ -130,7 +128,7 @@ runs:
             -machine-readable \
             -on-error=abort \
             -var region=${{ inputs.aws-region }} \
-            -var-file ${{ inputs.var-file }} \
+            -var-file $VAR_FILE \
             -only ${{ inputs.build }} \
             $TEMPLATE
         fi
@@ -149,5 +147,5 @@ runs:
           echo "AWS Region: $REGION"
           echo "aws-region=$REGION" >> $GITHUB_OUTPUT
         else
-          echo "The Packer Maifest does not exist."
+          echo "The Packer manifest does not exist."
         fi
