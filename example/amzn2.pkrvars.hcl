@@ -1,3 +1,9 @@
-OS_Name         = "AmazonLinux"
-OS_Version      = "2"
-source_ami_name = "amzn2-ami-hvm-2.0.*-x86_64-gp2"
+region             = "ap-southeast-1"
+source_ami_name    = "amzn2-ami-hvm-*-x86_64-gp2"
+instance_type      = "t3.micro"
+subnet_id          = "subnet-02b1a49c940615454"
+security_group_id  = "sg-01b89b44910d31b5d"
+name               = "amzn2-base"
+OS_Name            = "Amazon Linux 2"
+OS_Version         = "2023.2"
+ami_users          = []
