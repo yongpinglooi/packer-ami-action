@@ -1,0 +1,14 @@
+---
+- name: Apply CIS Hardening
+  hosts: all
+  become: true
+
+  vars:
+    benchmark_version: "v2.0.0"
+    system_is_ec2: true
+    run_audit: false
+    skip_for_travis: true
+    fix_mode: true
+
+  roles:
+    - ansible-lockdown/AMAZON2-CIS

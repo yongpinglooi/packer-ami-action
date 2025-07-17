@@ -23,7 +23,7 @@ variable "ami_users" {
 }
 
 source "amazon-ebs" "amzn2" {
-  region                  = var.region
+  region                      = var.region
   source_ami_filter {
     filters = {
       name                = var.source_ami_name
@@ -34,15 +34,21 @@ source "amazon-ebs" "amzn2" {
     owners      = ["amazon"]
   }
 
-  instance_type           = var.instance_type
-  subnet_id               = var.subnet_id
-  security_group_id       = var.security_group_id
-  ami_users               = var.ami_users
-  ami_name                = "${var.name}-{{timestamp}}"
+  instance_type               = var.instance_type
+  subnet_id                   = var.subnet_id
+  security_group_id           = var.security_group_id
+  ami_users                   = var.ami_users
+  ami_name                    = "${var.name}-{{timestamp}}"
   associate_public_ip_address = true
-  ssh_username            = "ec2-user"
+  ssh_username                = "ec2-user"
 }
 
 build {
   sources = ["source.amazon-ebs.amzn2"]
+
+  provisioner "ansible" {
+    playbook_file = "example/playbooks/cis.yml"
+    command       = "ANSIBLE_ROLES_PATH=example/roles ansible-playbook"
+    user          = "ec2-user"
+  }
 }
