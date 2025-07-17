@@ -40,13 +40,21 @@ source "amazon-ebs" "amzn2" {
   ami_users                   = var.ami_users
   ami_name                    = "${var.name}-{{timestamp}}"
   associate_public_ip_address = true
-
-  # Set the correct ssh user for Amazon Linux 2
   ssh_username                = "ec2-user"
 }
 
 build {
   sources = ["source.amazon-ebs.amzn2"]
+
+  # Shell provisioner to install Python 3.8 on Amazon Linux 2
+  provisioner "shell" {
+    inline = [
+      "sudo amazon-linux-extras enable python3.8",
+      "sudo yum clean metadata",
+      "sudo yum install -y python3.8 python3.8-devel python3.8-pip",
+      "sudo alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2"
+    ]
+  }
 
   provisioner "ansible" {
     playbook_file    = "example/playbooks/cis.yml"
@@ -54,8 +62,10 @@ build {
     ansible_env_vars = [
       "ANSIBLE_ROLES_PATH=example/roles",
       "ANSIBLE_HOST_KEY_CHECKING=False",
-      # Fix SSH signature algorithms and force identities only
       "ANSIBLE_SSH_ARGS=-oHostKeyAlgorithms=+ssh-rsa -oPubkeyAcceptedAlgorithms=+ssh-rsa -oIdentitiesOnly=yes"
+    ]
+    environment_vars = [
+      "ANSIBLE_PYTHON_INTERPRETER=/usr/bin/python3"
     ]
   }
 }
