@@ -46,6 +46,11 @@ jobs:
           packer init $TEMPLATE
           packer validate -var-file="$VAR_FILE_1" $TEMPLATE
 
+      - name: Clone AMAZON2-CIS role
+        run: |
+          mkdir -p example/roles/ansible-lockdown
+          git clone https://github.com/ansible-lockdown/AMAZON2-CIS.git example/roles/ansible-lockdown/AMAZON2-CIS
+
       - name: Build AMI
         run: |
           packer build -var-file="$VAR_FILE_1" $TEMPLATE
