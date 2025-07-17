@@ -1,53 +1,9 @@
-variable "OS_Name" {
-  type    = string
-  default = "AmazonLinux"
-}
-
-variable "OS_Version" {
-  type    = string
-  default = "2"
-}
-
-variable "name" {
-  type    = string
-  default = "amzn2-example"
-}
-
-variable "instance_type" {
-  type        = string
-  description = "AWS instance type"
-}
-
-variable "region" {
-  type        = string
-  description = "AWS region"
-}
-
-variable "source_ami_name" {
-  description = "The base AMI name to filter for"
-  type        = string
-  default     = "amzn2-ami-hvm"
-}
-
-variable "subnet_id" {
-  type        = string
-  description = "The subnet ID to launch the instance in"
-  default     = ""
-}
-
-variable "security_group_id" {
-  type        = string
-  description = "Security group ID for EC2 instance"
-  default     = ""
-}
-
-variable "vpc_id" {
-  type        = string
-  description = "The VPC ID to launch the instance in"
-  default     = ""
-}
-
-variable "ami_users" {
-  type        = list(string)
-  description = "Users allowed to launch this AMI"
-}
+region             = "ap-southeast-1"
+source_ami_name    = "amzn2-ami-hvm-*-x86_64-gp2"
+instance_type      = "t3.micro"
+subnet_id          = "subnet-02b1a49c940615454"
+security_group_id  = "sg-01b89b44910d31b5d"
+name               = "amzn2-base"
+OS_Name            = "Amazon Linux 2"
+OS_Version         = "2023.2"
+ami_users          = []
