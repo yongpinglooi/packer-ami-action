@@ -17,4 +17,4 @@
 
     - name: Apply CIS role
       ansible.builtin.include_role:
-        name: ansible-lockdown.AMAZON2-CIS
+        name: AMAZON2-CIS
