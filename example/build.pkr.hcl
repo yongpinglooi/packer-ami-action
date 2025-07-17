@@ -46,9 +46,9 @@ source "amazon-ebs" "amzn2" {
 build {
   sources = ["source.amazon-ebs.amzn2"]
 
-  provisioner "ansible" {
-    playbook_file = "example/playbooks/cis.yml"
-    command       = "ANSIBLE_ROLES_PATH=example/roles ansible-playbook"
-    user          = "ec2-user"
-  }
+provisioner "ansible" {
+  playbook_file    = "example/playbooks/cis.yml"
+  ansible_env_vars = ["ANSIBLE_ROLES_PATH=example/roles"]
+  command          = "/usr/bin/ansible-playbook"
+}
 }
