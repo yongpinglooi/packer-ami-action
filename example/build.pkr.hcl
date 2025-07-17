@@ -55,14 +55,14 @@ build {
     ]
   }
 
-  provisioner "ansible" {
-    playbook_file    = "example/playbooks/cis.yml"
-    extra_arguments = ["-e", "cis_rule_4_5_2_4_enabled=false"]
-    ansible_env_vars = [
-      "ANSIBLE_ROLES_PATH=example/roles",
-      "ANSIBLE_HOST_KEY_CHECKING=False",
-      "ANSIBLE_SSH_ARGS=-oHostKeyAlgorithms=+ssh-rsa -oPubkeyAcceptedAlgorithms=+ssh-rsa -oIdentitiesOnly=yes",
-      "ANSIBLE_PYTHON_INTERPRETER=/usr/bin/python3"
-    ]
-  }
+provisioner "ansible" {
+  playbook_file = "example/playbooks/cis.yml"
+  extra_arguments = ["-e", "{ \"cis_rule_4_5_2_4_enabled\": false }"]
+  ansible_env_vars = [
+    "ANSIBLE_ROLES_PATH=example/roles",
+    "ANSIBLE_HOST_KEY_CHECKING=False",
+    "ANSIBLE_SSH_ARGS=-oHostKeyAlgorithms=+ssh-rsa -oPubkeyAcceptedAlgorithms=+ssh-rsa -oIdentitiesOnly=yes",
+    "ANSIBLE_PYTHON_INTERPRETER=/usr/bin/python3"
+  ]
+}
 }
