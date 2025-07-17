@@ -8,7 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TEMPLATE: example/build.pkr.hcl
-      VAR_FILE: example/amzn2.pkrvars.hcl
+      VAR_FILE_1: example/variables.pkr.hcl
+      VAR_FILE_2: example/amzn2.pkrvars.hcl
 
     steps:
       - name: Checkout source
@@ -28,12 +29,9 @@ jobs:
 
       - name: Validate Packer template
         run: |
-          echo "PACKER COMMAND: packer init $TEMPLATE"
           packer init $TEMPLATE
-          echo "Validating Packer template..."
-          packer validate -var-file="$VAR_FILE" $TEMPLATE
+          packer validate -var-file="$VAR_FILE_1" -var-file="$VAR_FILE_2" $TEMPLATE
 
       - name: Build AMI
         run: |
-          echo "Building Packer AMI..."
-          packer build -var-file="$VAR_FILE" $TEMPLATE
+          packer build -var-file="$VAR_FILE_1" -var-file="$VAR_FILE_2" $TEMPLATE
