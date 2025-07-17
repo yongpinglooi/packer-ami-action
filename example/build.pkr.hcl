@@ -7,22 +7,6 @@ packer {
   }
 }
 
-data "amazon-ami" "amazon_linux_2" {
-  most_recent = true
-
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["137112412989"] # Amazon
-}
-
 source "amazon-ebs" "amazon-linux2" {
   ami_description             = local.ami_description
   ami_name                    = local.ami_name
@@ -37,7 +21,15 @@ source "amazon-ebs" "amazon-linux2" {
     ami-create = local.ami_create
   }
 
-  source_ami   = data.amazon-ami.amazon_linux_2.id
+  source_ami_filter {
+    filters = {
+      name                = "amzn2-ami-hvm-*-x86_64-gp2"
+      virtualization-type = "hvm"
+    }
+    owners      = ["137112412989"]
+    most_recent = true
+  }
+
   ssh_username = "ec2-user"
 
   tags = {
