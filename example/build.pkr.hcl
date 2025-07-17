@@ -7,30 +7,38 @@ packer {
   }
 }
 
-data "amazon-ami" "ubuntu" {
-  filters = {
-    name                = "ubuntu/images/*${var.source_ami_name}-*"
-    root-device-type    = "ebs"
-    virtualization-type = "hvm"
-  }
+data "amazon-ami" "amazon_linux_2" {
   most_recent = true
-  owners      = ["099720109477"]
+
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["137112412989"] # Amazon
 }
 
-source "amazon-ebs" "ubuntu-example" {
-  ami_description = local.ami_description
-  ami_name        = local.ami_name
-  ami_regions     = [var.region]
-  instance_type   = var.instance_type
-  region          = var.region
-  subnet_id       = var.subnet_id
+source "amazon-ebs" "amazon-linux2" {
+  ami_description             = local.ami_description
+  ami_name                    = local.ami_name
+  ami_regions                 = [var.region]
+  instance_type               = var.instance_type
+  region                      = var.region
+  subnet_id                   = var.subnet_id
+  security_group_id           = var.security_group_id
+  associate_public_ip_address = true
 
   run_tags = {
     ami-create = local.ami_create
   }
 
-  source_ami   = data.amazon-ami.ubuntu.id
-  ssh_username = "ubuntu"
+  source_ami   = data.amazon-ami.amazon_linux_2.id
+  ssh_username = "ec2-user"
 
   tags = {
     Name        = local.ami_name
@@ -41,26 +49,23 @@ source "amazon-ebs" "ubuntu-example" {
 }
 
 build {
-  sources = ["source.amazon-ebs.ubuntu-example"]
+  sources = ["source.amazon-ebs.amazon-linux2"]
 
   provisioner "shell" {
     inline = [
-          "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 1; done"
+      "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 1; done"
     ]
   }
 
   provisioner "shell" {
-    execute_command   = "echo 'ubuntu' | sudo -S env{{ .Vars }} {{ .Path }}"
-    expect_disconnect = true
-
     scripts = [
-        "${path.root}/scripts/update.sh",
-        "${path.root}/scripts/cleanup.sh"
+      "${path.root}/scripts/update.sh",
+      "${path.root}/scripts/cleanup.sh"
     ]
   }
 
   post-processor "manifest" {
-      output     = "${path.root}/manifest.json"
-      strip_path = true
+    output     = "${path.root}/manifest.json"
+    strip_path = true
   }
 }
