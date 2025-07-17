@@ -29,7 +29,7 @@ jobs:
       - name: Validate Packer template
         run: |
           packer init $TEMPLATE
-          packer validate -var-file="$VAR_FILE_1" -var-file="$VAR_FILE_2" $TEMPLATE
+          packer validate -var-file="$VAR_FILE_1" $TEMPLATE
 
       - name: Build AMI
         run: |
