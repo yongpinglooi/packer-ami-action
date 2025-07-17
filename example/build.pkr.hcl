@@ -40,19 +40,22 @@ source "amazon-ebs" "amzn2" {
   ami_users                   = var.ami_users
   ami_name                    = "${var.name}-{{timestamp}}"
   associate_public_ip_address = true
+
+  # Set the correct ssh user for Amazon Linux 2
   ssh_username                = "ec2-user"
 }
 
 build {
   sources = ["source.amazon-ebs.amzn2"]
 
-provisioner "ansible" {
-  playbook_file    = "example/playbooks/cis.yml"
-  command          = "ansible-playbook"
-  ansible_env_vars = [
-    "ANSIBLE_ROLES_PATH=example/roles",
-    "ANSIBLE_HOST_KEY_CHECKING=False",
-    "ANSIBLE_SSH_ARGS='-oHostKeyAlgorithms=+ssh-rsa'"
-  ]
-}
+  provisioner "ansible" {
+    playbook_file    = "example/playbooks/cis.yml"
+    command          = "ansible-playbook"
+    ansible_env_vars = [
+      "ANSIBLE_ROLES_PATH=example/roles",
+      "ANSIBLE_HOST_KEY_CHECKING=False",
+      # Fix SSH signature algorithms and force identities only
+      "ANSIBLE_SSH_ARGS=-oHostKeyAlgorithms=+ssh-rsa -oPubkeyAcceptedAlgorithms=+ssh-rsa -oIdentitiesOnly=yes"
+    ]
+  }
 }
