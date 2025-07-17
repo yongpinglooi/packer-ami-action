@@ -46,7 +46,6 @@ source "amazon-ebs" "amzn2" {
 build {
   sources = ["source.amazon-ebs.amzn2"]
 
-  # Shell provisioner to install Python 3.8 on Amazon Linux 2
   provisioner "shell" {
     inline = [
       "sudo amazon-linux-extras enable python3.8",
@@ -62,9 +61,7 @@ build {
     ansible_env_vars = [
       "ANSIBLE_ROLES_PATH=example/roles",
       "ANSIBLE_HOST_KEY_CHECKING=False",
-      "ANSIBLE_SSH_ARGS=-oHostKeyAlgorithms=+ssh-rsa -oPubkeyAcceptedAlgorithms=+ssh-rsa -oIdentitiesOnly=yes"
-    ]
-    environment_vars = [
+      "ANSIBLE_SSH_ARGS=-oHostKeyAlgorithms=+ssh-rsa -oPubkeyAcceptedAlgorithms=+ssh-rsa -oIdentitiesOnly=yes",
       "ANSIBLE_PYTHON_INTERPRETER=/usr/bin/python3"
     ]
   }
