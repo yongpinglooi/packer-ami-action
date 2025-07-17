@@ -23,7 +23,7 @@ source "amazon-ebs" "amazon-linux2" {
 
   source_ami_filter {
     filters = {
-      name                = "amzn2-ami-hvm-*-x86_64-gp2"
+      name                = "${var.source_ami_name}-*"
       virtualization-type = "hvm"
     }
     owners      = ["137112412989"]
