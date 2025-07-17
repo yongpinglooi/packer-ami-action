@@ -9,6 +9,8 @@
     run_audit: false
     skip_for_travis: true
     fix_mode: true
+    # Disable rule 4.5.2.4 - root password must be set
+    cis_rule_4_5_2_4_enabled: false
 
   roles:
     - ansible-lockdown/AMAZON2-CIS
