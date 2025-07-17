@@ -1,34 +1,39 @@
-name: build-ami
+name: Build AMI
 
 on:
-  push:
-
-env:
-  SUBNET_ID: "subnet-02b1a49c9406154543"
+  workflow_dispatch:
 
 jobs:
   build-ami:
     runs-on: ubuntu-latest
-    name: Build AMI
+    env:
+      TEMPLATE: example/build.pkr.hcl
+      VAR_FILE: example/amzn2.pkrvars.hcl
+
     steps:
-      - name: Checkout
+      - name: Checkout source
         uses: actions/checkout@v4
-      
-      - name: Test Action
-        id: test-action
-        uses: "./"
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: "ap-southeast-1"
-          packer-directory: "./example"
-          var-file: "./example/amzn2.pkrvars.hcl"
-          build: "amazon-ebs.amazon-linux2" 
+          aws-region: ap-southeast-1
 
-      - name: Clean Up AMIs
-        env:
-          AMI_ID: ${{ steps.test-action.outputs.ami_id }}
+      - name: Setup Packer
+        uses: hashicorp/setup-packer@v3.0.0
+        with:
+          version: "1.7.10"
+
+      - name: Validate Packer template
         run: |
-          aws ec2 deregister-image \
-          --image-id $AMI_ID \
-          --region ap-southeast-1
+          echo "PACKER COMMAND: packer init $TEMPLATE"
+          packer init $TEMPLATE
+          echo "Validating Packer template..."
+          packer validate -var-file="$VAR_FILE" $TEMPLATE
+
+      - name: Build AMI
+        run: |
+          echo "Building Packer AMI..."
+          packer build -var-file="$VAR_FILE" $TEMPLATE
