@@ -33,4 +33,4 @@ jobs:
 
       - name: Build AMI
         run: |
-          packer build -var-file="$VAR_FILE_1" -var-file="$VAR_FILE_2" $TEMPLATE
+          packer build -var-file="$VAR_FILE_1" $TEMPLATE
