@@ -48,7 +48,11 @@ build {
 
 provisioner "ansible" {
   playbook_file    = "example/playbooks/cis.yml"
-  ansible_env_vars = ["ANSIBLE_ROLES_PATH=example/roles"]
-  command          = "/usr/bin/ansible-playbook"
+  command          = "ansible-playbook"
+  ansible_env_vars = [
+    "ANSIBLE_ROLES_PATH=example/roles",
+    "ANSIBLE_HOST_KEY_CHECKING=False",
+    "ANSIBLE_SSH_ARGS='-oHostKeyAlgorithms=+ssh-rsa'"
+  ]
 }
 }
