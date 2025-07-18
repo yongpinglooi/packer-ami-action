@@ -12,4 +12,4 @@
     cis_rule_4_5_2_4_enabled: false
 
   roles:
-    - ansible-lockdown.AMAZON2-CIS
+    - role: ../roles/AMAZON2-CIS-devel
