@@ -57,7 +57,7 @@ build {
 
 provisioner "ansible" {
   playbook_file = "example/playbooks/cis.yml"
-  extra_arguments = ["-e", "{ \"cis_rule_4_5_2_4_enabled\": false }"]
+  extra_arguments = [ "--skip-tags=rule_4.5.2.4" ]
   ansible_env_vars = [
     "ANSIBLE_ROLES_PATH=example/roles",
     "ANSIBLE_HOST_KEY_CHECKING=False",
