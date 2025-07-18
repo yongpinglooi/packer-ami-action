@@ -12,4 +12,4 @@
     cis_rule_4_5_2_4_enabled: false
 
   roles:
-    - role: ../roles/AMAZON2-CIS-devel
+    - role: ../AMAZON2-CIS-devel
