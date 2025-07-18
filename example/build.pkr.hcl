@@ -72,13 +72,6 @@ build {
     ]
   }
 
-  # Step 4: Install Galaxy roles (assumes you have a requirements.yml file)
-  provisioner "shell" {
-    inline = [
-      "ansible-galaxy install -r example/playbooks/requirements.yml -p example/roles"
-    ]
-  }
-
   # Step 5: Run the Ansible playbook, skipping the CIS rule 4.5.2.4
   provisioner "ansible" {
     playbook_file   = "example/playbooks/cis.yml"
