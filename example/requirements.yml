@@ -1,4 +1,4 @@
+---
 roles:
-  - src: https://github.com/ansible-lockdown/AMAZON2-CIS
-    scm: git
-    name: ansible-lockdown/AMAZON2-CIS
+  - name: ansible-lockdown.AMAZON2-CIS
+    version: v2.0.0

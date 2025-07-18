@@ -46,6 +46,7 @@ source "amazon-ebs" "amzn2" {
 build {
   sources = ["source.amazon-ebs.amzn2"]
 
+  # Install Python 3.8
   provisioner "shell" {
     inline = [
       "sudo amazon-linux-extras enable python3.8",
@@ -55,14 +56,22 @@ build {
     ]
   }
 
-provisioner "ansible" {
-  playbook_file = "example/playbooks/cis.yml"
-  extra_arguments = [ "--skip-tags=rule_4.5.2.4" ]
-  ansible_env_vars = [
-    "ANSIBLE_ROLES_PATH=example/roles",
-    "ANSIBLE_HOST_KEY_CHECKING=False",
-    "ANSIBLE_SSH_ARGS=-oHostKeyAlgorithms=+ssh-rsa -oPubkeyAcceptedAlgorithms=+ssh-rsa -oIdentitiesOnly=yes",
-    "ANSIBLE_PYTHON_INTERPRETER=/usr/bin/python3"
-  ]
-}
+  # Install Ansible role
+  provisioner "shell" {
+    inline = [
+      "ansible-galaxy install -r example/playbooks/requirements.yml -p example/roles"
+    ]
+  }
+
+  # Run CIS hardening playbook, skip one rule
+  provisioner "ansible" {
+    playbook_file   = "example/playbooks/cis.yml"
+    extra_arguments = ["--skip-tags=rule_4.5.2.4"]
+    ansible_env_vars = [
+      "ANSIBLE_ROLES_PATH=example/roles",
+      "ANSIBLE_HOST_KEY_CHECKING=False",
+      "ANSIBLE_SSH_ARGS=-oHostKeyAlgorithms=+ssh-rsa -oPubkeyAcceptedAlgorithms=+ssh-rsa -oIdentitiesOnly=yes",
+      "ANSIBLE_PYTHON_INTERPRETER=/usr/bin/python3"
+    ]
+  }
 }
