@@ -1,0 +1,4 @@
+---
+roles:
+  - name: ansible-lockdown.AMAZON2-CIS
+    version: v2.0.0
