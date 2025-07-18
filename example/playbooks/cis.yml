@@ -13,3 +13,7 @@
 
   roles:
     - role: ../AMAZON2-CIS-devel
+  tasks:
+    - name: Skip rule 4.5.2.4
+      ansible.builtin.meta: end_play
+      tags: cis_4.5.2.4
