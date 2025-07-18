@@ -46,24 +46,40 @@ source "amazon-ebs" "amzn2" {
 build {
   sources = ["source.amazon-ebs.amzn2"]
 
-  # Install Python 3.8
+  # Step 1: Install Python 3.8
   provisioner "shell" {
     inline = [
       "sudo amazon-linux-extras enable python3.8",
       "sudo yum clean metadata",
-      "sudo yum install -y python3.8 python3.8-devel python3.8-pip",
+      "sudo yum install -y python38 python38-pip",
       "sudo alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2"
     ]
   }
 
-  # Install Ansible role
+  # Step 2: Install Ansible using pip
+  provisioner "shell" {
+    inline = [
+      "sudo python3 -m pip install --upgrade pip",
+      "sudo python3 -m pip install ansible"
+    ]
+  }
+
+  # Step 3: (Optional) Confirm Ansible is installed
+  provisioner "shell" {
+    inline = [
+      "ansible --version",
+      "which ansible"
+    ]
+  }
+
+  # Step 4: Install Galaxy roles (assumes you have a requirements.yml file)
   provisioner "shell" {
     inline = [
       "ansible-galaxy install -r example/playbooks/requirements.yml -p example/roles"
     ]
   }
 
-  # Run CIS hardening playbook, skip one rule
+  # Step 5: Run the Ansible playbook, skipping the CIS rule 4.5.2.4
   provisioner "ansible" {
     playbook_file   = "example/playbooks/cis.yml"
     extra_arguments = ["--skip-tags=rule_4.5.2.4"]
