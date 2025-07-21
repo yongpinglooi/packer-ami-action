@@ -1,19 +1,16 @@
----
-- name: Apply CIS Hardening
+- name: Bootstrap Python for Amazon Linux 2
+  hosts: all
+  gather_facts: no
+  become: true
+  tasks:
+    - name: Install Python 3
+      raw: sudo yum install -y python3
+    - name: Set python interpreter for fact gathering
+      set_fact:
+        ansible_python_interpreter: /usr/bin/python3
+
+- name: Apply CIS Role
   hosts: all
   become: true
-
-  vars:
-    benchmark_version: "v3.0.0"
-    system_is_ec2: true
-    run_audit: false
-    skip_for_travis: true
-    fix_mode: true
-    cis_rule_4_5_2_4_enabled: false
-
   roles:
-    - role: ../AMAZON2-CIS-devel
-  tasks:
-    - name: Skip rule 4.5.2.4
-      ansible.builtin.meta: end_play
-      tags: cis_4.5.2.4
+    - AMAZON2-CIS-devel
