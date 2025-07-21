@@ -86,7 +86,6 @@ build {
   provisioner "ansible" {
     playbook_file   = "example/playbooks/cis.yml"
     extra_arguments = [
-      "-vvv",  # very verbose
       "--skip-tags=rule_4.5.2.4"
     ]
     ansible_env_vars = [
