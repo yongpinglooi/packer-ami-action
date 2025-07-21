@@ -41,6 +41,7 @@ source "amazon-ebs" "amzn2" {
   ami_name                    = "${var.name}-{{timestamp}}"
   associate_public_ip_address = true
   ssh_username                = "ec2-user"
+  ssh_debug                   = true
 }
 
 build {
@@ -49,9 +50,10 @@ build {
   # Step 1: Install Python 3.8
   provisioner "shell" {
     inline = [
-      "sudo amazon-linux-extras enable python3.8",
-      "sudo yum clean metadata",
-      "sudo yum install -y python38 python38-pip",
+      "echo 'Installing Python 3.8 at: $(date)'",
+      "timeout 300s sudo amazon-linux-extras enable python3.8 || echo 'Timeout hit on enabling python3.8'",
+      "timeout 300s sudo yum clean metadata || echo 'Timeout hit on yum clean'",
+      "timeout 300s sudo yum install -y python38 python38-pip || echo 'Timeout hit on Python install'",
       "sudo alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 2"
     ]
   }
@@ -59,23 +61,35 @@ build {
   # Step 2: Install Ansible using pip
   provisioner "shell" {
     inline = [
-      "sudo python3 -m pip install --upgrade pip",
-      "sudo python3 -m pip install ansible"
+      "echo 'Installing Ansible at: $(date)'",
+      "timeout 300s sudo python3 -m pip install --upgrade pip || echo 'Timeout hit on pip upgrade'",
+      "timeout 300s sudo python3 -m pip install ansible || echo 'Timeout hit on Ansible install'"
     ]
   }
 
-  # Step 3: (Optional) Confirm Ansible is installed
+  # Step 3: Confirm Ansible is installed
   provisioner "shell" {
     inline = [
+      "echo 'Verifying Ansible installation at: $(date)'",
       "ansible --version",
       "which ansible"
     ]
   }
 
-  # Step 5: Run the Ansible playbook, skipping the CIS rule 4.5.2.4
+  # Step 4: Heartbeat before running Ansible
+  provisioner "shell" {
+    inline = [
+      "echo 'Reached Ansible playbook phase at: $(date)'"
+    ]
+  }
+
+  # Step 5: Run the Ansible playbook
   provisioner "ansible" {
     playbook_file   = "example/playbooks/cis.yml"
-    extra_arguments = ["--skip-tags=rule_4.5.2.4"]
+    extra_arguments = [
+      "-vvv",  # very verbose
+      "--skip-tags=rule_4.5.2.4"
+    ]
     ansible_env_vars = [
       "ANSIBLE_ROLES_PATH=example/roles",
       "ANSIBLE_HOST_KEY_CHECKING=False",
