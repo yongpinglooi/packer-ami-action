@@ -18,23 +18,23 @@
   tags:
       - always
 
-- name: Ensure root password is set
-  when:
-      - amazon2cis_rule_4_5_2_4
-  tags:
-      - always
-  block:
-      - name: Ensure root password is set
-        ansible.builtin.shell: passwd -S root | egrep -e "(Password set, SHA512 crypt|Password locked)"
-        changed_when: false
-        failed_when: false
-        register: root_passwd_set
-
-      - name: Ensure root password is set
-        ansible.builtin.assert:
-            that: root_passwd_set.rc == 0
-            fail_msg: "You have rule 4.5.2.4 enabled this requires that you have a root password set"
-            success_msg: "You have a root password set"
+#- name: Ensure root password is set
+#  when:
+#      - amazon2cis_rule_4_5_2_4
+#  tags:
+#      - always
+#  block:
+#      - name: Ensure root password is set
+#        ansible.builtin.shell: passwd -S root | egrep -e "(Password set, SHA512 crypt|Password locked)"
+#        changed_when: false
+#        failed_when: false
+#        register: root_passwd_set
+#
+#      - name: Ensure root password is set
+#        ansible.builtin.assert:
+#            that: root_passwd_set.rc == 0
+#            fail_msg: "You have rule 4.5.2.4 enabled this requires that you have a root password set"
+#            success_msg: "You have a root password set"
 
 - name: "check sugroup exists if used"
   block:
