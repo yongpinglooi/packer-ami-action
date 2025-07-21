@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TEMPLATE: example/build.pkr.hcl
-      VAR_FILE_1: example/variables.pkr.hcl
+      VAR_FILE_1: example/amzn2.pkrvars.hcl
 
     steps:
       - name: Checkout source
