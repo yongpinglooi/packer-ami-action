@@ -407,7 +407,7 @@ amazon2cis_rule_4_5_1_5: true
 amazon2cis_rule_4_5_2_1: true
 amazon2cis_rule_4_5_2_2: true
 amazon2cis_rule_4_5_2_3: true
-amazon2cis_rule_4_5_2_4: true
+amazon2cis_rule_4_5_2_4: false
 
 # user default envs
 amazon2cis_rule_4_5_3_1: true
