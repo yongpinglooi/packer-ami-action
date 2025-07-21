@@ -41,7 +41,6 @@ source "amazon-ebs" "amzn2" {
   ami_name                    = "${var.name}-{{timestamp}}"
   associate_public_ip_address = true
   ssh_username                = "ec2-user"
-  ssh_debug                   = true
 }
 
 build {
