@@ -31,11 +31,6 @@ jobs:
       - name: Check ansible-playbook path
         run: which ansible-playbook
 
-      - name: Clone AMAZON2-CIS role
-        run: |
-          mkdir -p example/roles/ansible-lockdown
-          git clone https://github.com/ansible-lockdown/AMAZON2-CIS.git example/roles/ansible-lockdown/AMAZON2-CIS
-
       - name: Setup Packer
         uses: hashicorp/setup-packer@v3
         with:
