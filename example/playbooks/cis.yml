@@ -1,4 +1,5 @@
 ---
+
 - name: Apply CIS Role
   hosts: all
   gather_facts: true
