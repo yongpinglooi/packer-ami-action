@@ -91,8 +91,7 @@ build {
     ansible_env_vars = [
       "ANSIBLE_ROLES_PATH=example/roles",
       "ANSIBLE_HOST_KEY_CHECKING=False",
-      "ANSIBLE_SSH_ARGS=-oHostKeyAlgorithms=+ssh-rsa -oPubkeyAcceptedAlgorithms=+ssh-rsa -oIdentitiesOnly=yes",
-      "ANSIBLE_PYTHON_INTERPRETER=/usr/bin/python3"
+      "ANSIBLE_SSH_ARGS=-oHostKeyAlgorithms=+ssh-rsa -oPubkeyAcceptedAlgorithms=+ssh-rsa -oIdentitiesOnly=yes"
     ]
   }
 }
