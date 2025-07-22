@@ -1,19 +1,7 @@
-
-- name: Bootstrap Python for Amazon Linux 2
-  hosts: all
-  gather_facts: yes
-  become: true
-  vars:
-    ansible_python_interpreter: /usr/bin/python3
-  tasks:
-    - name: Install Python 3
-      raw: sudo yum install -y python2
-    - name: Set python interpreter for fact gathering
-      set_fact:
-        ansible_python_interpreter: /usr/bin/python3
-
+---
 - name: Apply CIS Role
   hosts: all
+  gather_facts: true
   become: true
   roles:
     - ../AMAZON2-CIS-devel
