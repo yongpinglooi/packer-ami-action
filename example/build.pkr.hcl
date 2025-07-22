@@ -57,15 +57,14 @@ build {
     ]
   }
 
-# Step 2: Install Ansible using pip
+# Step 2: Install Ansible using pip (downgraded version)
 provisioner "shell" {
   inline = [
     "echo 'Installing Ansible at: $(date)'",
     "timeout 300s sudo python3 -m pip install --upgrade pip || echo 'Timeout hit on pip upgrade'",
-    "timeout 300s sudo python3 -m pip install 'ansible-core>=2.12,<2.14' || echo 'Timeout hit on Ansible install'"
+    "timeout 300s sudo python3 -m pip install 'ansible-core>=2.10,<2.12' || echo 'Timeout hit on Ansible install'"
   ]
 }
-
   # Step 3: Confirm Ansible is installed
   provisioner "shell" {
     inline = [
