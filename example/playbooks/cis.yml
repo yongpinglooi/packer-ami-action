@@ -1,7 +1,7 @@
 
 - name: Bootstrap Python for Amazon Linux 2
   hosts: all
-  gather_facts: no
+  gather_facts: yes
   become: true
   vars:
     ansible_python_interpreter: /usr/bin/python3
